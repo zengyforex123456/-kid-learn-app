@@ -1,0 +1,19 @@
+{
+  "name": "kids-literacy-backend",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/index.js",
+    "start": "node src/index.js",
+    "db:init": "node src/db/init.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.0.0",
+    "fastify": "^5.0.0",
+    "@fastify/cors": "^10.0.0",
+    "@fastify/multipart": "^9.0.0",
+    "bcrypt": "^5.1.0",
+    "jsonwebtoken": "^9.0.0",
+    "zod": "^3.23.0"
+  }
+}

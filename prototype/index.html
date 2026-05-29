@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>幼儿双语趣味识字 — 原型</title>
+<style>
+:root {
+  --bg: #FFF8F0;
+  --card: #FFFFFF;
+  --primary: #FF9A76;
+  --secondary: #FFE0B2;
+  --accent: #81C784;
+  --text: #5D4037;
+  --text-light: #8D6E63;
+  --danger: #EF9A9A;
+  --bubble-1: #FFCCBC;
+  --bubble-2: #C5E1A5;
+  --bubble-3: #B3E5FC;
+  --bubble-4: #F8BBD0;
+  --star: #FFD54F;
+  --shadow: 0 4px 16px rgba(0,0,0,0.08);
+  --radius: 24px;
+  --radius-sm: 16px;
+  --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --btn-min: 64px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+.container { max-width: 480px; margin: 0 auto; min-height: 100vh; position: relative; }
+.screen { display: none; padding: 20px; min-height: 100vh; }
+.screen.active { display: flex; flex-direction: column; }
+
+/* Top bar */
+.topbar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 0; margin-bottom: 16px;
+}
+.topbar .avatar { width: 48px; height: 48px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 28px; cursor: pointer; }
+.topbar .coins { display: flex; align-items: center; gap: 6px; background: var(--card); padding: 8px 16px; border-radius: 20px; box-shadow: var(--shadow); font-weight: 700; font-size: 18px; }
+.topbar .settings { width: 48px; height: 48px; border-radius: 50%; background: var(--card); display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; box-shadow: var(--shadow); }
+
+/* Game hub */
+.game-title { font-size: 28px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+.game-subtitle { font-size: 16px; color: var(--text-light); margin-bottom: 20px; }
+.game-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.game-card {
+  background: var(--card); border-radius: var(--radius); padding: 20px 16px;
+  box-shadow: var(--shadow); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  min-height: 160px; justify-content: center; gap: 10px;
+}
+.game-card:active { transform: scale(0.95); box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+.game-card .icon { font-size: 52px; }
+.game-card .label { font-size: 18px; font-weight: 700; }
+.game-card .stars { font-size: 14px; }
+.game-card.treasure { border: 3px solid #FFCC80; }
+.game-card.bubble { border: 3px solid #90CAF9; }
+.game-card.match { border: 3px solid #A5D6A7; }
+.game-card.full-width { grid-column: 1 / -1; min-height: 100px; flex-direction: row; gap: 16px; }
+.game-card.full-width .icon { font-size: 40px; }
+
+/* Sticker bar */
+.sticker-bar { display: flex; gap: 8px; align-items: center; padding: 12px 16px; background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 12px; cursor: pointer; }
+.sticker-bar .badge { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+.sticker-bar .badge.earned { background: var(--star); }
+.sticker-bar .badge.locked { background: #E0E0E0; opacity: 0.5; }
+.sticker-bar span { font-weight: 700; font-size: 16px; }
+
+/* Bottom nav */
+.bottom-nav {
+  display: flex; justify-content: space-around; align-items: center;
+  background: var(--card); border-radius: var(--radius) var(--radius) 0 0;
+  padding: 12px 16px; box-shadow: 0 -2px 12px rgba(0,0,0,0.06);
+  position: sticky; bottom: 0; margin-top: auto;
+}
+.nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; font-size: 12px; color: var(--text-light); transition: color 0.2s; }
+.nav-item .nav-icon { font-size: 28px; }
+.nav-item.active { color: var(--primary); }
+
+/* Treasure hunt game screen */
+.game-scene {
+  flex: 1; position: relative; border-radius: var(--radius);
+  overflow: hidden; min-height: 360px;
+  background: linear-gradient(180deg, #C8E6C9 0%, #A5D6A7 40%, #81C784 70%, #66BB6A 100%);
+}
+.scene-element { position: absolute; cursor: pointer; transition: transform 0.2s; }
+.scene-element:active { transform: scale(1.15); }
+.scene-tree { font-size: 60px; text-shadow: 2px 2px 4px rgba(0,0,0,0.15); }
+.scene-card { background: var(--star); border-radius: var(--radius-sm); padding: 12px 18px; font-size: 22px; font-weight: 700; box-shadow: 0 4px 12px rgba(0,0,0,0.2); animation: float 2s ease-in-out infinite; }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+.game-hint { text-align: center; padding: 16px; font-size: 20px; font-weight: 700; background: rgba(255,255,255,0.9); border-radius: var(--radius); margin-top: 12px; }
+
+/* Bubble game */
+.bubble-area { flex: 1; position: relative; border-radius: var(--radius); overflow: hidden; min-height: 360px; background: linear-gradient(180deg, #E3F2FD, #BBDEFB, #90CAF9); }
+.bubble {
+  position: absolute; border-radius: 50%; display: flex; align-items: center;
+  justify-content: center; cursor: pointer; font-size: 28px; font-weight: 700;
+  box-shadow: inset -3px -3px 8px rgba(0,0,0,0.1), 0 4px 12px rgba(0,0,0,0.1);
+  animation: bob 3s ease-in-out infinite;
+}
+@keyframes bob { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-10px) scale(1.05); } }
+.bubble.b1 { background: var(--bubble-1); animation-delay: 0s; }
+.bubble.b2 { background: var(--bubble-2); animation-delay: 0.5s; }
+.bubble.b3 { background: var(--bubble-3); animation-delay: 1s; }
+.bubble.b4 { background: var(--bubble-4); animation-delay: 1.5s; }
+
+/* Matching game */
+.match-area { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 16px; }
+.match-card {
+  aspect-ratio: 1; border-radius: var(--radius); display: flex; align-items: center;
+  justify-content: center; font-size: 42px; cursor: pointer; background: var(--card);
+  box-shadow: var(--shadow); transition: transform 0.3s, background 0.3s;
+}
+.match-card:active { transform: scale(0.92); }
+.match-card.selected { background: var(--star); transform: scale(1.05); box-shadow: 0 0 20px rgba(255,213,79,0.5); }
+.match-card.matched { background: var(--accent); opacity: 0.6; pointer-events: none; }
+
+/* Parent screen */
+.parent-gate { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; min-height: 60vh; }
+.pin-dots { display: flex; gap: 12px; }
+.pin-dot { width: 16px; height: 16px; border-radius: 50%; background: #E0E0E0; }
+.pin-dot.filled { background: var(--primary); }
+.num-pad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 300px; }
+.num-key { width: 72px; height: 72px; border-radius: 50%; border: none; background: var(--card); font-size: 28px; font-weight: 700; cursor: pointer; box-shadow: var(--shadow); color: var(--text); }
+.num-key:active { background: var(--secondary); transform: scale(0.9); }
+.parent-panel { display: none; }
+.parent-panel.open { display: block; }
+.setting-row { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid #F0E0D0; }
+.setting-row .label { font-size: 18px; font-weight: 600; }
+.toggle { width: 52px; height: 28px; border-radius: 14px; background: #CCC; position: relative; cursor: pointer; transition: background 0.3s; }
+.toggle.on { background: var(--accent); }
+.toggle::after { content: ''; position: absolute; width: 24px; height: 24px; border-radius: 50%; background: white; top: 2px; left: 2px; transition: left 0.3s; }
+.toggle.on::after { left: 26px; }
+
+/* Responsive */
+@media (min-width: 768px) {
+  .container { max-width: 768px; }
+  .game-grid { grid-template-columns: repeat(3, 1fr); }
+  .game-scene, .bubble-area { min-height: 480px; }
+  .num-key { width: 88px; height: 88px; font-size: 32px; }
+  .game-card { min-height: 200px; }
+  .game-card .icon { font-size: 64px; }
+  .game-card .label { font-size: 22px; }
+}
+@media (min-width: 1440px) {
+  .container { max-width: 1024px; }
+  .game-grid { grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .game-scene, .bubble-area { min-height: 560px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HOME SCREEN -->
+  <div class="screen active" id="screen-home">
+    <div class="topbar">
+      <div class="avatar">🐻</div>
+      <div class="coins">⭐ 24</div>
+      <div class="settings" onclick="showScreen('screen-parent')">🔒</div>
+    </div>
+    <div class="game-title">🌳 探险乐园</div>
+    <div class="game-subtitle">选一个游戏开始吧！</div>
+    <div class="sticker-bar" onclick="showScreen('screen-stickers')">
+      <span>🏆 贴纸背包</span>
+      <div class="badge earned">🌟</div>
+      <div class="badge earned">🦋</div>
+      <div class="badge earned">🌸</div>
+      <div class="badge locked">🔒</div>
+      <div class="badge locked">🔒</div>
+      <span style="margin-left:auto">3/12 →</span>
+    </div>
+    <div class="game-grid">
+      <div class="game-card treasure" onclick="showScreen('screen-treasure')">
+        <div class="icon">🏕️</div>
+        <div class="label">森林寻宝</div>
+        <div class="stars">⭐⭐⭐</div>
+      </div>
+      <div class="game-card bubble" onclick="showScreen('screen-bubble')">
+        <div class="icon">🫧</div>
+        <div class="label">泡泡大作战</div>
+        <div class="stars">⭐⭐⭐</div>
+      </div>
+      <div class="game-card match" onclick="showScreen('screen-match')">
+        <div class="icon">🧩</div>
+        <div class="label">配对大闯关</div>
+        <div class="stars">⭐⭐</div>
+      </div>
+      <div class="game-card full-width" style="opacity:0.5">
+        <div class="icon">🔜</div>
+        <div class="label">更多游戏<br><small>即将推出</small></div>
+      </div>
+    </div>
+    <div class="bottom-nav">
+      <div class="nav-item active"><div class="nav-icon">🏠</div>主页</div>
+      <div class="nav-item" onclick="showScreen('screen-stickers')"><div class="nav-icon">⭐</div>贴纸</div>
+      <div class="nav-item"><div class="nav-icon">🎵</div>儿歌</div>
+      <div class="nav-item"><div class="nav-icon">⚙️</div>设置</div>
+    </div>
+  </div>
+
+  <!-- TREASURE HUNT GAME -->
+  <div class="screen" id="screen-treasure">
+    <div class="topbar">
+      <div style="font-size:28px;cursor:pointer" onclick="showScreen('screen-home')">←</div>
+      <div class="coins">⭐ 24</div>
+      <div></div>
+    </div>
+    <div class="game-scene">
+      <div class="scene-element scene-tree" style="top:10%;left:8%;">🌳</div>
+      <div class="scene-element scene-tree" style="top:5%;right:10%;">🌲</div>
+      <div class="scene-element scene-tree" style="bottom:20%;left:5%;">🌴</div>
+      <div class="scene-element scene-card" style="top:25%;left:30%;" onclick="this.style.display='none';playReward()">🍎<br>苹果</div>
+      <div class="scene-element scene-card" style="bottom:30%;right:20%;" onclick="this.style.display='none';playReward()">🐱<br>猫</div>
+      <div class="scene-element scene-card" style="top:50%;left:50%;" onclick="this.style.display='none';playReward()">👀<br>眼睛</div>
+      <div class="scene-element scene-card" style="bottom:15%;left:40%;" onclick="this.style.display='none';playReward()">🥛<br>牛奶</div>
+      <div class="scene-element" style="bottom:8%;right:15%;font-size:40px;">🪨</div>
+      <div class="scene-element" style="top:60%;right:25%;font-size:36px;">🌻</div>
+    </div>
+    <div class="game-hint">👆 在森林里找找藏起来的卡片吧！</div>
+  </div>
+
+  <!-- BUBBLE GAME -->
+  <div class="screen" id="screen-bubble">
+    <div class="topbar">
+      <div style="font-size:28px;cursor:pointer" onclick="showScreen('screen-home')">←</div>
+      <div class="coins">⭐ 24</div>
+      <div></div>
+    </div>
+    <div class="bubble-area" id="bubble-area">
+      <div class="bubble b1" style="width:90px;height:90px;top:15%;left:10%;" onclick="popBubble(this)">🐶<br>dog</div>
+      <div class="bubble b2" style="width:80px;height:80px;top:40%;right:12%;" onclick="popBubble(this)">🍌<br>香蕉</div>
+      <div class="bubble b3" style="width:85px;height:85px;bottom:25%;left:20%;" onclick="popBubble(this)">🐘<br>大象</div>
+      <div class="bubble b4" style="width:75px;height:75px;top:55%;left:45%;" onclick="popBubble(this)">🫐<br>蓝莓</div>
+      <div class="bubble b1" style="width:70px;height:70px;bottom:15%;right:25%;" onclick="popBubble(this)">👃<br>nose</div>
+      <div class="bubble b2" style="width:88px;height:88px;top:25%;right:35%;" onclick="popBubble(this)">🦁<br>狮子</div>
+    </div>
+    <div class="game-hint" id="bubble-prompt">🔊 请找到: <strong>苹果</strong></div>
+  </div>
+
+  <!-- MATCH GAME -->
+  <div class="screen" id="screen-match">
+    <div class="topbar">
+      <div style="font-size:28px;cursor:pointer" onclick="showScreen('screen-home')">←</div>
+      <div class="coins">⭐ 24</div>
+      <div></div>
+    </div>
+    <div style="text-align:center;padding:8px;font-size:18px;font-weight:600;">🔊 请配对这些卡片!</div>
+    <div class="match-area" id="match-grid">
+      <div class="match-card" data-pair="1" onclick="selectMatch(this)">🍎</div>
+      <div class="match-card" data-pair="2" onclick="selectMatch(this)">🐱</div>
+      <div class="match-card" data-pair="3" onclick="selectMatch(this)">🐶</div>
+      <div class="match-card" data-pair="1" onclick="selectMatch(this)">苹果</div>
+      <div class="match-card" data-pair="2" onclick="selectMatch(this)">猫</div>
+      <div class="match-card" data-pair="3" onclick="selectMatch(this)">狗</div>
+    </div>
+  </div>
+
+  <!-- STICKER COLLECTION -->
+  <div class="screen" id="screen-stickers">
+    <div class="topbar">
+      <div style="font-size:28px;cursor:pointer" onclick="showScreen('screen-home')">←</div>
+      <div style="font-size:22px;font-weight:800;">🏆 贴纸背包</div>
+      <div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+      <div style="text-align:center;padding:20px;background:#FFF9C4;border-radius:16px;font-size:48px;">🌟<br><small>已收集</small></div>
+      <div style="text-align:center;padding:20px;background:#C8E6C9;border-radius:16px;font-size:48px;">🦋<br><small>已收集</small></div>
+      <div style="text-align:center;padding:20px;background:#F8BBD0;border-radius:16px;font-size:48px;">🌸<br><small>已收集</small></div>
+      <div style="text-align:center;padding:20px;background:#E0E0E0;border-radius:16px;font-size:48px;opacity:0.4;">🔒</div>
+      <div style="text-align:center;padding:20px;background:#E0E0E0;border-radius:16px;font-size:48px;opacity:0.4;">🔒</div>
+      <div style="text-align:center;padding:20px;background:#E0E0E0;border-radius:16px;font-size:48px;opacity:0.4;">🔒</div>
+    </div>
+    <div style="text-align:center;margin-top:20px;font-size:18px;color:var(--text-light);">完成更多游戏收集贴纸！</div>
+  </div>
+
+  <!-- PARENT SCREEN -->
+  <div class="screen" id="screen-parent">
+    <div class="topbar">
+      <div style="font-size:28px;cursor:pointer" onclick="showScreen('screen-home')">←</div>
+      <div style="font-size:22px;font-weight:800;">👨‍👩‍👧 家长中心</div>
+      <div></div>
+    </div>
+    <div class="parent-gate" id="parent-gate">
+      <div style="font-size:48px;">🔐</div>
+      <div style="font-size:20px;font-weight:700;">请输入家长密码</div>
+      <div class="pin-dots" id="pin-dots">
+        <div class="pin-dot"></div>
+        <div class="pin-dot"></div>
+        <div class="pin-dot"></div>
+        <div class="pin-dot"></div>
+      </div>
+      <div class="num-pad" id="num-pad">
+        <button class="num-key" onclick="enterPin('1')">1</button>
+        <button class="num-key" onclick="enterPin('2')">2</button>
+        <button class="num-key" onclick="enterPin('3')">3</button>
+        <button class="num-key" onclick="enterPin('4')">4</button>
+        <button class="num-key" onclick="enterPin('5')">5</button>
+        <button class="num-key" onclick="enterPin('6')">6</button>
+        <button class="num-key" onclick="enterPin('7')">7</button>
+        <button class="num-key" onclick="enterPin('8')">8</button>
+        <button class="num-key" onclick="enterPin('9')">9</button>
+        <button class="num-key" style="background:transparent;box-shadow:none;"></button>
+        <button class="num-key" onclick="enterPin('0')">0</button>
+        <button class="num-key" onclick="clearPin()">⌫</button>
+      </div>
+    </div>
+    <div class="parent-panel" id="parent-panel">
+      <div class="setting-row">
+        <span class="label">📊 已学汉字</span>
+        <strong style="font-size:22px;">24 / 50</strong>
+      </div>
+      <div class="setting-row">
+        <span class="label">📊 已学英文</span>
+        <strong style="font-size:22px;">18 / 50</strong>
+      </div>
+      <div class="setting-row">
+        <span class="label">🎮 游戏次数</span>
+        <strong style="font-size:22px;">37 次</strong>
+      </div>
+      <div class="setting-row">
+        <span class="label">⏱️ 每日时长限制</span>
+        <strong style="font-size:22px;">30 分钟</strong>
+      </div>
+      <div class="setting-row">
+        <span class="label">👁️ 护眼模式</span>
+        <div class="toggle on"></div>
+      </div>
+      <div class="setting-row">
+        <span class="label">🔊 背景音乐</span>
+        <div class="toggle on"></div>
+      </div>
+      <div class="setting-row">
+        <span class="label">📵 离线模式</span>
+        <div class="toggle"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+let currentScreen = 'screen-home';
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  currentScreen = id;
+}
+
+let pin = '';
+function enterPin(d) { if(pin.length<4){pin+=d;updateDots();if(pin.length===4&&pin==='1234'){document.getElementById('parent-gate').style.display='none';document.getElementById('parent-panel').classList.add('open');}}}
+function clearPin() { pin=pin.slice(0,-1);updateDots(); }
+function updateDots() { document.querySelectorAll('#pin-dots .pin-dot').forEach((d,i)=>{d.classList.toggle('filled',i<pin.length);}); }
+
+function playReward() {
+  let r = document.createElement('div');
+  r.textContent = '🎉✨🌟';
+  r.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font-size:64px;z-index:999;pointer-events:none;animation:rewardBurst 1s ease-out forwards';
+  document.body.appendChild(r);
+  setTimeout(()=>r.remove(),1000);
+}
+
+function popBubble(el) {
+  el.style.transform = 'scale(1.3)';
+  el.style.opacity = '0';
+  el.style.transition = 'all 0.3s';
+  setTimeout(()=>el.remove(),300);
+  playReward();
+}
+
+let selected = null;
+function selectMatch(el) {
+  if(el.classList.contains('matched')) return;
+  if(!selected){selected=el;el.classList.add('selected');return;}
+  if(el.dataset.pair===selected.dataset.pair){
+    el.classList.add('matched');selected.classList.add('matched');
+    playReward();
+  }else{
+    el.classList.add('selected');
+    setTimeout(()=>{el.classList.remove('selected');selected.classList.remove('selected');selected=null;},500);
+    return;
+  }
+  selected=null;
+}
+</script>
+</body>
+</html>

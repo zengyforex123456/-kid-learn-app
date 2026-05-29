@@ -1,0 +1,9 @@
+{
+  "env": {
+    "http_proxy": "http://172.20.112.1:10810",
+    "https_proxy": "http://172.20.112.1:10810",
+    "all_proxy": "socks5://172.20.112.1:10808",
+    "NO_PROXY": "localhost,127.0.0.1"
+  }
+}
+

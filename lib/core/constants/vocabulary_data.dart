@@ -1,0 +1,76 @@
+import '../../domain/entities/vocabulary_item.dart';
+
+const List<VocabularyItem> vocabularyData = [
+  // 水果 (10)
+  VocabularyItem(id: 1, chinese: '苹果', english: 'apple', emoji: '🍎', category: WordCategory.fruit),
+  VocabularyItem(id: 2, chinese: '香蕉', english: 'banana', emoji: '🍌', category: WordCategory.fruit),
+  VocabularyItem(id: 3, chinese: '葡萄', english: 'grape', emoji: '🍇', category: WordCategory.fruit),
+  VocabularyItem(id: 4, chinese: '橙子', english: 'orange', emoji: '🍊', category: WordCategory.fruit),
+  VocabularyItem(id: 5, chinese: '草莓', english: 'strawberry', emoji: '🍓', category: WordCategory.fruit),
+  VocabularyItem(id: 6, chinese: '西瓜', english: 'watermelon', emoji: '🍉', category: WordCategory.fruit),
+  VocabularyItem(id: 7, chinese: '桃子', english: 'peach', emoji: '🍑', category: WordCategory.fruit),
+  VocabularyItem(id: 8, chinese: '蓝莓', english: 'blueberry', emoji: '🫐', category: WordCategory.fruit),
+  VocabularyItem(id: 9, chinese: '樱桃', english: 'cherry', emoji: '🍒', category: WordCategory.fruit),
+  VocabularyItem(id: 10, chinese: '梨', english: 'pear', emoji: '🍐', category: WordCategory.fruit),
+  VocabularyItem(id: 11, chinese: '芒果', english: 'mango', emoji: '🥭', category: WordCategory.fruit),
+  VocabularyItem(id: 12, chinese: '柠檬', english: 'lemon', emoji: '🍋', category: WordCategory.fruit),
+
+  // 动物 (13)
+  VocabularyItem(id: 13, chinese: '猫', english: 'cat', emoji: '🐱', category: WordCategory.animal),
+  VocabularyItem(id: 14, chinese: '狗', english: 'dog', emoji: '🐶', category: WordCategory.animal),
+  VocabularyItem(id: 15, chinese: '兔子', english: 'rabbit', emoji: '🐰', category: WordCategory.animal),
+  VocabularyItem(id: 16, chinese: '大象', english: 'elephant', emoji: '🐘', category: WordCategory.animal),
+  VocabularyItem(id: 17, chinese: '狮子', english: 'lion', emoji: '🦁', category: WordCategory.animal),
+  VocabularyItem(id: 18, chinese: '猴子', english: 'monkey', emoji: '🐵', category: WordCategory.animal),
+  VocabularyItem(id: 19, chinese: '熊猫', english: 'panda', emoji: '🐼', category: WordCategory.animal),
+  VocabularyItem(id: 20, chinese: '小鸟', english: 'bird', emoji: '🐦', category: WordCategory.animal),
+  VocabularyItem(id: 21, chinese: '鱼', english: 'fish', emoji: '🐟', category: WordCategory.animal),
+  VocabularyItem(id: 22, chinese: '蝴蝶', english: 'butterfly', emoji: '🦋', category: WordCategory.animal),
+  VocabularyItem(id: 23, chinese: '牛', english: 'cow', emoji: '🐮', category: WordCategory.animal),
+  VocabularyItem(id: 24, chinese: '猪', english: 'pig', emoji: '🐷', category: WordCategory.animal),
+  VocabularyItem(id: 25, chinese: '青蛙', english: 'frog', emoji: '🐸', category: WordCategory.animal),
+
+  // 五官/身体 (12)
+  VocabularyItem(id: 26, chinese: '眼睛', english: 'eye', emoji: '👁️', category: WordCategory.body),
+  VocabularyItem(id: 27, chinese: '耳朵', english: 'ear', emoji: '👂', category: WordCategory.body),
+  VocabularyItem(id: 28, chinese: '鼻子', english: 'nose', emoji: '👃', category: WordCategory.body),
+  VocabularyItem(id: 29, chinese: '嘴巴', english: 'mouth', emoji: '👄', category: WordCategory.body),
+  VocabularyItem(id: 30, chinese: '手', english: 'hand', emoji: '✋', category: WordCategory.body),
+  VocabularyItem(id: 31, chinese: '脚', english: 'foot', emoji: '🦶', category: WordCategory.body),
+  VocabularyItem(id: 32, chinese: '头', english: 'head', emoji: '🗣️', category: WordCategory.body),
+  VocabularyItem(id: 33, chinese: '牙齿', english: 'tooth', emoji: '🦷', category: WordCategory.body),
+  VocabularyItem(id: 34, chinese: '舌头', english: 'tongue', emoji: '👅', category: WordCategory.body),
+  VocabularyItem(id: 35, chinese: '肩膀', english: 'shoulder', emoji: '💪', category: WordCategory.body),
+  VocabularyItem(id: 36, chinese: '膝盖', english: 'knee', emoji: '🦵', category: WordCategory.body),
+  VocabularyItem(id: 37, chinese: '手指', english: 'finger', emoji: '👆', category: WordCategory.body),
+
+  // 日常 (13)
+  VocabularyItem(id: 38, chinese: '水', english: 'water', emoji: '💧', category: WordCategory.daily),
+  VocabularyItem(id: 39, chinese: '牛奶', english: 'milk', emoji: '🥛', category: WordCategory.daily),
+  VocabularyItem(id: 40, chinese: '面包', english: 'bread', emoji: '🍞', category: WordCategory.daily),
+  VocabularyItem(id: 41, chinese: '太阳', english: 'sun', emoji: '☀️', category: WordCategory.daily),
+  VocabularyItem(id: 42, chinese: '月亮', english: 'moon', emoji: '🌙', category: WordCategory.daily),
+  VocabularyItem(id: 43, chinese: '星星', english: 'star', emoji: '⭐', category: WordCategory.daily),
+  VocabularyItem(id: 44, chinese: '花', english: 'flower', emoji: '🌸', category: WordCategory.daily),
+  VocabularyItem(id: 45, chinese: '树', english: 'tree', emoji: '🌳', category: WordCategory.daily),
+  VocabularyItem(id: 46, chinese: '书', english: 'book', emoji: '📖', category: WordCategory.daily),
+  VocabularyItem(id: 47, chinese: '杯子', english: 'cup', emoji: '🥤', category: WordCategory.daily),
+  VocabularyItem(id: 48, chinese: '鞋子', english: 'shoe', emoji: '👟', category: WordCategory.daily),
+  VocabularyItem(id: 49, chinese: '椅子', english: 'chair', emoji: '🪑', category: WordCategory.daily),
+  VocabularyItem(id: 50, chinese: '床', english: 'bed', emoji: '🛏️', category: WordCategory.daily),
+];
+
+const List<Map<String, String>> stickerData = [
+  {'id': 's1', 'name': '探险家', 'emoji': '🌟', 'unlock': 'treasure'},
+  {'id': 's2', 'name': '小蝴蝶', 'emoji': '🦋', 'unlock': 'treasure'},
+  {'id': 's3', 'name': '小花朵', 'emoji': '🌸', 'unlock': 'treasure'},
+  {'id': 's4', 'name': '星星王', 'emoji': '✨', 'unlock': 'treasure'},
+  {'id': 's5', 'name': '泡泡龙', 'emoji': '🫧', 'unlock': 'bubble'},
+  {'id': 's6', 'name': '彩虹', 'emoji': '🌈', 'unlock': 'bubble'},
+  {'id': 's7', 'name': '小太阳', 'emoji': '🌞', 'unlock': 'bubble'},
+  {'id': 's8', 'name': '月牙', 'emoji': '🌙', 'unlock': 'bubble'},
+  {'id': 's9', 'name': '配对王', 'emoji': '🧩', 'unlock': 'match'},
+  {'id': 's10', 'name': '奖杯', 'emoji': '🏆', 'unlock': 'match'},
+  {'id': 's11', 'name': '钻石', 'emoji': '💎', 'unlock': 'match'},
+  {'id': 's12', 'name': '王冠', 'emoji': '👑', 'unlock': 'match'},
+];
