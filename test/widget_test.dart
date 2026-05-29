@@ -5,7 +5,6 @@ import 'package:kid_learn_app/presentation/widgets/game_card.dart';
 void main() {
   group('GameCard widget', () {
     testWidgets('renders emoji label and stars', (tester) async {
-      bool tapped = false;
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: GameCard(
@@ -13,7 +12,7 @@ void main() {
             label: '森林寻宝',
             stars: '⭐⭐⭐',
             borderColor: Colors.orange,
-            onTap: () => tapped = true,
+            onTap: () {},
           ),
         ),
       ));

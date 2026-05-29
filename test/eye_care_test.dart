@@ -27,7 +27,6 @@ void main() {
     });
 
     test('copyWith preserves other fields', () {
-      final now = DateTime.now();
       const state = EyeCareState(showRest: false, lastActiveTime: null);
       final updated = state.copyWith(showRest: true);
       expect(updated.showRest, true);
